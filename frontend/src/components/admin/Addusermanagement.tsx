@@ -99,7 +99,7 @@ import { toast } from 'react-toastify'  // Import toast
 
 const roles = ['Admin', 'User', 'Manager', 'Supervisor']
 const departments = ['Finance', 'HR', 'Marketing', 'Software', 'IT']
-const sites = ['Delhi Office', 'Mumbai Office', 'Bangalore Office', 'Kolkata Office']
+// const sites = ['Delhi Office', 'Mumbai Office', 'Bangalore Office', 'Kolkata Office']
 
 export default function AddUser() {
   const router = useRouter()
@@ -112,7 +112,7 @@ export default function AddUser() {
     userName: '',
     userEmail: '',
     userPassword: '',
-    individualSite: '',
+    individualRole: '',
     department: '',
     departmentRole: '',
     status: 'Active' as 'Active' | 'Inactive',
@@ -122,7 +122,7 @@ export default function AddUser() {
     userName: '',
     userEmail: '',
     userPassword: '',
-    individualSite: '',
+    individualRole: '',
     department: '',
     departmentRole: '',
   })
@@ -141,7 +141,7 @@ export default function AddUser() {
       userName: '',
       userEmail: '',
       userPassword: '',
-      individualSite: '',
+      individualRole: '',
       department: '',
       departmentRole: '',
     }
@@ -169,10 +169,10 @@ export default function AddUser() {
       isValid = false
     }
 
-    if (!formData.individualSite) {
-      newErrors.individualSite = 'Site is required'
-      isValid = false
-    }
+    if (!formData.individualRole) {
+  newErrors.individualRole = 'Role is required'
+  isValid = false
+}
 
     if (!formData.department) {
       newErrors.department = 'Department is required'
@@ -188,46 +188,46 @@ export default function AddUser() {
     return isValid
   }
 
-const handleSave = async () => {
-  // Validate form
-  if (!validateForm()) {
-    // setError('Please fill in all required fields correctly')
-    return
-  }
-
-  setLoading(true)
-  setError(null)
-  setSuccess(false)
-
-  try {
-    // Prepare data for API (match API field names)
-    const userData: CreateUserInput = {
-      user_name: formData.userName,
-      user_email: formData.userEmail,
-      user_password: formData.userPassword,  // Added password
-      individual_site: formData.individualSite,
-      department: formData.department,
-      department_role: formData.departmentRole,
-      status: formData.status,
+  const handleSave = async () => {
+    // Validate form
+    if (!validateForm()) {
+      // setError('Please fill in all required fields correctly')
+      return
     }
 
-    // Call API
-    await UsersService.createUser(userData)
+    setLoading(true)
+    setError(null)
+    setSuccess(false)
 
-    setSuccess(true)
-    toast.success('User created successfully!')
-    // Redirect after 1.5 seconds
-    setTimeout(() => {
-      router.push('/admin/usermanagement')
-    }, 1500)
-  } catch (err: any) {
-    console.error('Error creating user:', err)
-      toast.error(err.message || 'Failed to create user. Please try again.')
-    setError(err.message || 'Failed to create user. Please try again.')
-  } finally {
-    setLoading(false)
-  }
+    try {
+      // Prepare data for API (match API field names)
+    const userData: CreateUserInput = {
+  user_name: formData.userName,
+  user_email: formData.userEmail,
+  user_password: formData.userPassword,
+  individual_role: formData.individualRole,   // individual_site → individual_role
+  department: formData.department,
+  department_role: formData.departmentRole,
+  status: formData.status,
 }
+
+      // Call API
+      await UsersService.createUser(userData)
+
+      setSuccess(true)
+      toast.success('User created successfully!')
+      // Redirect after 1.5 seconds
+      setTimeout(() => {
+        router.push('/admin/usermanagement')
+      }, 1500)
+    } catch (err: any) {
+      console.error('Error creating user:', err)
+      toast.error(err.message || 'Failed to create user. Please try again.')
+      setError(err.message || 'Failed to create user. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleCancel = () => {
     router.push('/admin/usermanagement')
@@ -236,7 +236,7 @@ const handleSave = async () => {
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden', bgcolor: '#F5F7FA' }}>
       <Sidebar selectedMenu={selectedMenu} onMenuSelect={setSelectedMenu} />
-      
+
       <Box sx={{ flex: 1, p: 4, overflowY: 'auto' }}>
         <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
           Add User
@@ -298,19 +298,19 @@ const handleSave = async () => {
 
             {/* Individual Site */}
             <TextField
-              label="Individual Site"
+              label="Individual Role"
               select
               size="small"
-              value={formData.individualSite}
-              onChange={(e) => handleChange('individualSite', e.target.value)}
-              error={!!errors.individualSite}
-              helperText={errors.individualSite}
+              value={formData.individualRole}
+              onChange={(e) => handleChange('individualRole', e.target.value)}
+              error={!!errors.individualRole}
+              helperText={errors.individualRole}
               required
               disabled={loading}
             >
-              {sites.map((site) => (
-                <MenuItem key={site} value={site}>
-                  {site}
+              {roles.map((role) => (
+                <MenuItem key={role} value={role}>
+                  {role}
                 </MenuItem>
               ))}
             </TextField>

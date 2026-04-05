@@ -904,7 +904,7 @@ export default function UserManagementList() {
                         <TableRow sx={{ bgcolor: '#FAFAFA' }}>
                           <TableCell sx={{ fontWeight: 600 }}>User Name</TableCell>
                           <TableCell sx={{ fontWeight: 600 }}>Email</TableCell>
-                          <TableCell sx={{ fontWeight: 600 }}>Site</TableCell>
+                          <TableCell sx={{ fontWeight: 600 }}>Individual Role</TableCell>
                           <TableCell sx={{ fontWeight: 600 }}>Department</TableCell>
                           <TableCell sx={{ fontWeight: 600 }}>Role</TableCell>
                           <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
@@ -925,7 +925,7 @@ export default function UserManagementList() {
                             <TableRow key={user.id} sx={{ '&:hover': { bgcolor: '#FAFAFA' } }}>
                               <TableCell>{user.user_name}</TableCell>
                               <TableCell>{user.user_email}</TableCell>
-                              <TableCell>{user.individual_site}</TableCell>
+                              <TableCell>{user.individual_role}</TableCell>
                               <TableCell>{user.department}</TableCell>
                               <TableCell>{user.department_role}</TableCell>
                               <TableCell>

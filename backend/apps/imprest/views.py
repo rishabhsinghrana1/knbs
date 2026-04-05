@@ -513,22 +513,22 @@ class ImprestRequestViewSet(viewsets.ModelViewSet):
             elif type_filter == 'pending_my':
                 queryset = queryset.filter(
                     user_requested=user_id,
-                    status__in=['Pending_HOD', 'Pending_FC', 'Pending_DG']
+                    status__in=['Submitted', 'HODApproved']
                 )
             elif type_filter == 'pending_dept' and user_dept_id:
                 queryset = queryset.filter(
                     department=user_dept_id,
-                    status__in=['Pending_HOD', 'Pending_FC', 'Pending_DG']
+                    status__in=['Submitted', 'HODApproved']
                 )
             elif type_filter == 'completed_my':
                 queryset = queryset.filter(
                     user_requested=user_id,
-                    status__in=['Approved', 'Closed']
+                    status__in=['FinanceApproved', 'Completed']
                 )
             elif type_filter == 'completed_dept' and user_dept_id:
                 queryset = queryset.filter(
                     department=user_dept_id,
-                    status__in=['Approved', 'Closed']
+                    status__in=['FinanceApproved', 'Completed']
                 )
         
         return queryset.order_by('-created_on')
@@ -552,7 +552,7 @@ class ImprestRequestViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        imprest.status = 'Pending_HOD'
+        imprest.status = 'Submitted' 
         imprest.modified_by = request.user.id
         imprest.save()
         
@@ -570,13 +570,13 @@ class ImprestRequestViewSet(viewsets.ModelViewSet):
         comments = request.data.get('comments', '')
         
         # Determine approval role based on current status
-        if imprest.status == 'Pending_HOD':
+        if imprest.status == 'Submitted':
             approver_role = 'HOD'
-            next_status = 'Pending_FC'
-        elif imprest.status == 'Pending_FC':
+            next_status = 'HODApproved'
+        elif imprest.status == 'HODRejected':
             approver_role = 'FC'
-            next_status = 'Pending_DG'
-        elif imprest.status == 'Pending_DG':
+            next_status = 'FinanceApproved'
+        elif imprest.status == 'FinanceRejected':
             approver_role = 'DG'
             next_status = 'Approved'
         else:
@@ -779,7 +779,7 @@ class ImprestRequestViewSet(viewsets.ModelViewSet):
                 'draft': ImprestRequest.objects.filter(user_requested=user_id, status='Draft').count(),
                 'pending': ImprestRequest.objects.filter(
                     user_requested=user_id,
-                    status__in=['Pending_HOD', 'Pending_FC', 'Pending_DG']
+                    status__in=['Submitted', 'HODApproved']
                 ).count(),
                 'approved': ImprestRequest.objects.filter(user_requested=user_id, status='Approved').count(),
                 'rejected': ImprestRequest.objects.filter(user_requested=user_id, status='Rejected').count(),

@@ -6,7 +6,9 @@ class PaymentAuthorization(models.Model):
 
     STATUS_CHOICES = [
         ('Draft', 'Draft'),
-        ('Processed', 'Processed'),
+        ('Submitted', 'Submitted'),
+        ('FinanceApproved', 'FinanceApproved'),
+        ('Completed', 'Completed'),
         ('Cancelled', 'Cancelled'),
     ]
 

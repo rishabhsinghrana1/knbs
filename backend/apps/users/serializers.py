@@ -79,7 +79,7 @@ class UserManagementSerializer(serializers.ModelSerializer):
         model = UserManagement
         fields = [
             'id', 'user_name', 'user_email', 'user_password', 
-            'individual_site', 'department', 'role', 'role_details', 
+            'individual_role', 'department', 'role', 'role_details', 
             'role_name', 'department_role', 'status', 'last_login',
             'created_at', 'updated_at'
         ]
@@ -131,7 +131,7 @@ class UserLoginResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserManagement
         fields = [
-            'id', 'user_name', 'user_email', 'individual_site', 
+            'id', 'user_name', 'user_email', 'individual_role', 
             'department', 'role', 'role_details', 'department_role',
             'status', 'permissions'
         ]

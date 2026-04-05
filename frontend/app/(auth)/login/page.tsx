@@ -51,30 +51,68 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true);
-    setError('');
+  // const onSubmit = async (data: LoginFormData) => {
+  //   setIsLoading(true);
+  //   setError('');
 
-    try {
-      const result = await signIn('credentials', {
-        redirect: false,
-        email: data.email,
-        password: data.password,
-        role: data.role,
-      });
+  //   try {
+  //     const result = await signIn('credentials', {
+  //       redirect: false,
+  //       email: data.email,
+  //       password: data.password,
+  //       role: data.role,
+  //     });
 
-      if (result?.error) {
-        setError('Invalid email or password');
-      } else {
-        router.push('/dashboard');
+  //     if (result?.error) {
+  //       setError('Invalid email or password');
+  //     } else {
+  //       router.push('/dashboard');
+  //     }
+  //   } catch (err) {
+  //     setError('An error occurred. Please try again.');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+const onSubmit = async (data: LoginFormData) => {
+  setIsLoading(true);
+  setError('');
+
+  try {
+    const response = await fetch(
+      'http://127.0.0.1:8000/api/v1/users/auth/login/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+          role: data.role,
+        }),
       }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    );
 
+    const result = await response.json();
+
+    if (result.success) {
+      // token save
+      localStorage.setItem('token', result.token);
+
+      // user info save
+      localStorage.setItem('user', JSON.stringify(result.user));
+
+      router.push('/dashboard');
+    } else {
+      setError(result.message || 'Login failed');
+    }
+  } catch (err) {
+    setError('Server error. Please try again.');
+  } finally {
+    setIsLoading(false);
+  }
+};
   return (
     <Box
       sx={{
@@ -196,7 +234,7 @@ export default function LoginPage() {
                 {...register('role')}
                 error={!!errors.role}
               >
-                <MenuItem value="Managing Director">Managing Director</MenuItem>
+                <MenuItem value="Admin">Admin</MenuItem>
                 <MenuItem value="Staff">Staff</MenuItem>
                 <MenuItem value="HOD">Head of Department</MenuItem>
                 <MenuItem value="Financial Controller">Financial Controller</MenuItem>

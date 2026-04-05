@@ -275,7 +275,7 @@ def login_view(request):
         # Check if user has an active delegation
         today = timezone.now().date()
         active_delegation = UserDelegation.objects.filter(
-            user=user,
+            user_email=user.user_email,
             status='Active',
             from_date__lte=today,
             to_date__gte=today

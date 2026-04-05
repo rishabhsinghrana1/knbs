@@ -220,7 +220,7 @@ class UserManagement(models.Model):
     user_name = models.CharField(max_length=100)
     user_email = models.EmailField(unique=True)
     user_password = models.CharField(max_length=255)
-    individual_site = models.CharField(max_length=100, blank=True, null=True)
+    individual_role = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
     
     # Role relationship

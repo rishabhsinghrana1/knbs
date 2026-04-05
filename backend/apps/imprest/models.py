@@ -222,13 +222,16 @@ from django.utils import timezone
 class ImprestRequest(models.Model):
     STATUS_CHOICES = [
         ('Draft', 'Draft'),
-        ('Pending_HOD', 'Pending HOD'),
-        ('Pending_FC', 'Pending FC'),
-        ('Pending_DG', 'Pending DG'),
-        ('Approved', 'Approved'),
-        ('Rejected', 'Rejected'),
+        ('Submitted', 'Submitted'),
+        ('HODApproved', 'HOD Approved'),
+        ('HODRejected', 'HOD Rejected'),
+        ('FinanceApproved', 'Finance Approved'),
+        ('FinanceRejected', 'Finance Rejected'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
         ('Surrendered', 'Surrendered'),
-        ('Closed', 'Closed'),
+        
+
     ]
     
     imprest_id = models.AutoField(primary_key=True)

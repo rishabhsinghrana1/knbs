@@ -373,14 +373,15 @@ class ImprestRequestSerializer(serializers.ModelSerializer):
     # =========================
 
     def create(self, validated_data):
+        print("Validated Data:", validated_data)
         request_lines_data = self.initial_data.get('request_lines', [])
         user_id = self.context['request'].user.id
         request = self.context.get('request')
         user = request.user if request else None
 
-        validated_data['created_by'] = user.id if user.is_authenticated else 1
-
-        validated_data['user_entered'] = user.id if user.is_authenticated else 1
+        validated_data['created_by'] = self.initial_data.get('created_by')
+        validated_data['user_entered'] = self.initial_data.get('user_entered')
+        validated_data['user_requested'] = self.initial_data.get('user_requested')
 
         imprest_request = ImprestRequest.objects.create(**validated_data)
 
